@@ -14,12 +14,14 @@ class UserController extends Controller
     }
 
     public function auth(Request $req){
-        echo $req;
         $user = User::where('nis', $req->nis)->first();
-        if(!$user || $req->password != $user->password){
-            return ["Error" => "Invalid Username Or Password"];
+        if(!$user){
+            return ["error" => "Invalid username / password"];
+        }elseif($req->password != $user->password){
+            return ["error" => "Invalid username / password"];
         }else{
             return $user;
         }
+        
     }
 }
