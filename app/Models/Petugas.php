@@ -5,8 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Master extends Model
+class Petugas extends Model
 {
-    public $table = "master";
     use HasFactory;
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+    public $table = 'petugas';
+    
 }
