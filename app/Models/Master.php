@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Master extends Model
 {
-    protected $table = "master";
+    public $table = "master";
     use HasFactory;
 }
