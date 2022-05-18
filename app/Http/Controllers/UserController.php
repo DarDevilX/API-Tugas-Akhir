@@ -3,25 +3,71 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+use Hash;
 use App\Models\Master;
+use App\Models\Petugas;
+use App\Models\Transaction;
+use App\Models\Siswa;
 
 
 class UserController extends Controller
 {
-    public function register(Request $req){
-        
-    }
 
     public function auth(Request $req){
-        $user = User::where('nis', $req->nis)->first();
-        if(!$user){
-            return ["error" => "Invalid username / password"];
-        }elseif($req->password != $user->password){
-            return ["error" => "Invalid username / password"];
+        $master = Master::where('username', $req->input('username'))->first();
+        $petugas = Petugas::where('username', $req->input('username'))->first();
+        $siswa = Siswa::where('nis', $req->input('username'))->first();
+        if($master){
+            if($master->password == $req->input('password')){
+                return [
+                    'name' => $master->nama,
+                    'loggedin'  => true,
+                    'role' => 'master'
+                ];
+            }else{
+                return ['loggedin' => false];
+            }
+        }else if($petugas){
+            if(Hash::check($req->input('password'), $petugas->password)){
+                return [
+                    'name' => $petugas->nama,
+                    'loggedin'  => true,
+                    'role' => 'petugas'
+                ];
+            }else{
+                return ['loggedin' => false];
+            }
+        }else if($siswa){
+            if($siswa->password == $req->input('password')){
+                return [
+                    'kelas' => $siswa->jurusan,
+                    'name' => $siswa->nama,
+                    'nik' => $siswa->nis,
+                    'loggedin'  => true,
+                    'role' => 'siswa'
+                ];            
+            }else{
+                return ['loggedin' => false];
+            }
         }else{
-            return $user;
+            return ['loggedin' => false];
         }
-        
+    }
+
+    public function pay(Request $req){
+        $pay = new Transaction;
+        $pay->nis = $req->input('nis');
+        $pay->nama = $req->input('nama');
+        $pay->kelas = $req->input('kelas');
+        $pay->jml_byr = $req->input('jumlah');
+        $pay->tanggal = $req->input('tanggal');
+        $pay->gambar = 'sd';
+        $pay->save();
+        return 200;
+    }
+
+    public function trShow(){
+        $data = Transaction::All();
+        return 200;
     }
 }
