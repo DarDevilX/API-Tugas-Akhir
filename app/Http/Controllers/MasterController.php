@@ -9,7 +9,7 @@ use Hash;
 class MasterController extends Controller
 {
 
-    public function addPetugas(Request $req){
+    public function addPetugas(Request $req) {
         $petugas;
         if($petugas = Petugas::where('nama', $req->input('nama'))->first()){
             return ['Error' => 'Duplicate Name/Username'];
@@ -28,6 +28,39 @@ class MasterController extends Controller
     public function deletePetugas($id){
         $petugas = Petugas::where('id', $id)->delete();
         return ['Success' => 'Success Deleting Data'];
+    }
+
+    public function showPetugas() {
+        $petugas = Petugas::all();
+        return $petugas;
+    }
+
+    public function getById($id) {
+        $petugas = Petugas::find($id);
+        if(!$petugas || $petugas == null){
+            return ['Error' => 'Data Not Found'];
+        }else{
+            return [
+                'id' => $id,
+                'Data' => $petugas
+            ];
+        }
+    }
+
+    public function editPetugas(Request $req, $id) {
+        $petugas = Petugas::find($id);
+        $petugas->nama = $req->input('nama');
+        $petugas->username = $req->input('username');
+        $petugas->password = $req->input('password');
+        $petugas->update($req->all());
+        if($petugas){
+            return [
+                "Data" => $petugas,
+                "Status" => 200
+            ];
+        }else{
+            return ["Status" => 500];
+        }
     }
 
 }

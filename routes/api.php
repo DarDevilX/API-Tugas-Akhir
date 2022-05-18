@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MasterController;
+use App\Http\Controllers\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,10 +21,21 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Post Route
-Route::post('addPetugas', [MasterController::class, 'addPetugas']);
-Route::post('login', [UserController::class, 'auth']);
-Route::post('register', [UserController::class, 'register']);
+// Auth Route
+Route::post('auth', [UserController::class, 'auth']);
 
-// Delete Route
+// Student Route
+Route::post('pay', [UserController::class, 'pay']);
+Route::post('trShow', [UserController::class, 'trShow']);
+
+// Route::post('register', [UserController::class, 'register']); 
+
+// Officer Route
+
+
+// Master Route
+Route::put('editpetugas/{id}', [MasterController::class, 'editPetugas']);
+Route::post('addPetugas', [MasterController::class, 'addPetugas']);
 Route::delete('deletePetugas/{id}', [MasterController::class, 'deletePetugas']);
+Route::post('getid/{id}', [MasterController::class , 'getById']);
+Route::get('petugas', [MasterController::class, 'showPetugas']);
