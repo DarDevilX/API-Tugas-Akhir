@@ -8,7 +8,7 @@ use App\Models\Master;
 use App\Models\Petugas;
 use App\Models\Transaction;
 use App\Models\Siswa;
-
+use App\Models\Register;
 
 class UserController extends Controller
 {
@@ -40,6 +40,7 @@ class UserController extends Controller
         }else if($siswa){
             if($siswa->password == $req->input('password')){
                 return [
+ 
                     'kelas' => $siswa->jurusan,
                     'name' => $siswa->nama,
                     'nik' => $siswa->nis,
@@ -61,7 +62,7 @@ class UserController extends Controller
         $pay->kelas = $req->input('kelas');
         $pay->jml_byr = $req->input('jumlah');
         $pay->tanggal = $req->input('tanggal');
-        $pay->gambar = 'sd';
+        $pay->gambar = $req->input('img');
         $pay->save();
         return 200;
     }
@@ -69,5 +70,13 @@ class UserController extends Controller
     public function trShow(){
         $data = Transaction::All();
         return 200;
+    }
+
+    public function register(Request $req){
+        $reg = new Register;
+        $reg->nis = $req->input('nis');
+        $reg->nama = $req->input('nama');
+        $reg->password = $req->input('password');
+        $reg->jurusan = $req->input('jurusan');
     }
 }
